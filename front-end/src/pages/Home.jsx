@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { FormField,Loader } from '../components'
 
 const Home = () => {
-// const [loading,setLoading] = useState(ture)
-// const[allPosts, setAllPosts]= useState(null)
+const [loading,setLoading] = useState(false)
+const[allPosts, setAllPosts]= useState(null)
  
 
   return (
@@ -17,6 +17,15 @@ const Home = () => {
       </div>
       <div className="mt-16">
         <FormField/>
+      </div>
+      <div className="mt-10">
+        {loading?(
+          <div className="flex justify-center">
+            <Loader/>
+          </div>
+        ):(
+          <></>
+        )}
       </div>
       
       
