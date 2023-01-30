@@ -21,10 +21,12 @@ const CreatePost = () => {
 
   }
   const handleChange = (e)=>{
+    setForm({...form , [e.target.name]:e.target.value})
     
   }
   const handleSupriseMe = ()=>{
-
+    const randomPrompt = getRandomPrompt(form.prompt)
+    setForm({...form , prompt:randomPrompt})
   }
 
   return (
@@ -72,7 +74,7 @@ const CreatePost = () => {
             Once you have created the image then you can share the image on your amazing gallery
           </p>
           <button className='mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center'>
-            {loading?"Sharing...": "Share"}
+            {loading?"Sharing...": "Share on your beautifull gallery"}
           </button>
         </div>
         
