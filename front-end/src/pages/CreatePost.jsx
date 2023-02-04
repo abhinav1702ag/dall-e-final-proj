@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {preview} from '../assets';
 import {getRandomPrompt} from '../utils'
-import { FormField,Loader } from '../components';
+import { FormField , Loader } from '../components';
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -14,14 +14,69 @@ const CreatePost = () => {
   
   const  [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
-  const handleSubmit = ()=>{
+
+
+  const handleSubmit = async (e)=>{
+    e.preventDefault();
+    if(form.prompt&&form.photo){
+      setLoading(true);
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/post',{
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+          },
+          body: JSON.stringify({...form})
+          // this is the body that the sever is expecting on the other end 
+
+        })
+        await response.json()
+        alert('success')
+        navigate('/');
+      } catch (error) {
+        alert(err)
+      }
+      finally{
+        setLoading(false);
+
+      }
+    }
+    else{
+      alert("Please enter the prompt and generate the image")
+    }
+
+    
 
   }
-  const generateImg = ()=>{
+  const generateImg = async()=>{
+    if(form.prompt){
+      try {
+        setGeneratingImg(true);
+        const response = await fetch('http://localhost:8080/api/v1/dalle',{
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+          },
+          body: JSON.stringify({prompt:form.prompt})
+        })
+        const data = await response.json();
+        setForm({...form,photo:`data:image/jpeg;base64,${data.photo}` })
+
+      } catch (error) {
+        alert(error);
+      } finally{
+        setGeneratingImg(false);
+      }
+    }
+    else{
+      alert('Please eneter a prompt')
+    }
 
   }
   const handleChange = (e)=>{
     setForm({...form , [e.target.name]:e.target.value})
+    // so in this case what will have is e.target.name will be equal to e.target.value that whatever is in the field for name
+    // for the case of prompt e.target.prompt will be equal the field value 
     
   }
   const handleSupriseMe = ()=>{
